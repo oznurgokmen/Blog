@@ -1,0 +1,44 @@
+﻿
+@model Kategori
+@{
+    ViewBag.Title = "KategoriEkle";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Yeni Kategori Ekle</h2><hr />
+
+<div class="row">
+    <div class="col-md-6">
+
+        @using (Html.BeginForm("KategoriEkle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.LabelFor(m => m.KategoriAdi)
+
+            @Html.TextBoxFor(m => m.KategoriAdi, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.KategoriAdi, null, new { @class = "text-danger" })
+            <br />
+
+            <input type="submit" value="Kaydet" class="btn btn-success" />
+            <br />
+            <br />
+        }
+
+        @if (ViewBag.hata != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.hata
+            </div>
+        }
+
+        @if (ViewBag.sonuc != null)
+        {
+            <div class="alert alert-success">
+                @ViewBag.sonuc
+            </div>
+        }
+    </div>
+</div>
+

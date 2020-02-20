@@ -1,0 +1,20 @@
+﻿
+@model IEnumerable<Yorum>
+
+@foreach (var yorum in Model)
+{
+    <div class="media mb-4">
+        <div class="media-body">        
+            <h6 class="mt-0">  <i class="fas fa-user-circle fa-fw"></i>   @yorum.Uye.KullaniciAdi @yorum.Tarih</h6>
+             @yorum.YorumIcerik
+
+            @if (Session["uyeId"] != null && yorum.UyeId == Convert.ToInt32(Session["uyeId"].ToString()))
+            {
+                <br />
+                <button class="btn btn-danger btnYorumSil" data-id="@yorum.Id">Sil</button>
+            }
+        </div>
+    </div>
+
+}
+

@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Yazi>
+
+<h5 class="card-header">Son Eklenenler</h5>
+<div class="card-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <ul class="list-unstyled mb-0">
+
+                @foreach (var yazi in Model)
+                {
+                    <li>
+                        <a href="~/Home/YaziDetay/@yazi.Id">
+                            @yazi.Baslik (@yazi.Kategori.KategoriAdi)
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+    </div>
+</div>
+

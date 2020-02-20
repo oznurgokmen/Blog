@@ -1,0 +1,78 @@
+﻿
+@model Uye
+@{
+    ViewBag.Title = "UyeEkle";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Yeni Üye Ekle</h2><hr />
+
+<div class="row">
+    <div class="col-md-6">
+
+        @using (Html.BeginForm("UyeEkle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.LabelFor(m => m.KullaniciAdi)
+
+            @Html.TextBoxFor(m => m.KullaniciAdi, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.KullaniciAdi, null, new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.AdSoyad)
+
+            @Html.TextBoxFor(m => m.AdSoyad, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.AdSoyad, null, new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.Email)
+
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.Sifre)
+
+            @Html.PasswordFor(m => m.Sifre, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Sifre, null,
+            new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.UyeAdmin)
+
+            @Html.DropDownListFor(m => m.UyeAdmin, new List<SelectListItem>() {
+           new SelectListItem() {Text="Üye", Value="0" },
+           new SelectListItem() {Text="Admin", Value="1" }
+         } ,new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.UyeAdmin, null, new { @class = "text-danger" })
+            <br />
+
+            <input type="submit" value="Kaydet" class="btn btn-success" />
+            <br />
+            <br />
+        }
+
+        @if (ViewBag.hata != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.hata
+            </div>
+        }
+
+        @if (ViewBag.sonuc != null)
+        {
+            <div class="alert alert-success">
+                @ViewBag.sonuc
+            </div>
+        }
+    </div>
+</div>
+
+
+

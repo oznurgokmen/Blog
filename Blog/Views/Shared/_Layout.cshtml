@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>GÖZ KARARI YAZALIM-BLOG</title>  
+    <script src="~/Content/admin/js/js.cookie.js"></script>
+    <link href="~/Content/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/blog/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/Content/blog/css/blog-home.css" rel="stylesheet" />
+    @RenderSection("styles", false)
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-link" href="https://gozkarariyazalim.com">
+                Göz Kararı Yazalım
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item @IsActive("Index", "Home")">
+                        @Html.ActionLink("Anasayfa", "Index", "Home",
+                                null, new { @class = "nav-link" })
+                    </li>
+
+                    <li class="nav-item @IsActive("Contact", "Home")">
+                        @Html.ActionLink("İletişim", "Contact", "Home",
+                                null, new { @class = "nav-link" })
+                    </li>
+
+                    @if (Session["uyeOturum"] == null)
+                    {
+
+                        <li class="nav-item @IsActive("OturumAc", "Uyeler")">
+                            @Html.ActionLink("Oturum Aç", "OturumAc", "Uyeler",
+                                    null, new { @class = "nav-link", returnUrl = Request.RawUrl })
+                        </li>
+                    }
+
+                    else
+                    {
+                        if (Session["uyeAdmin"].ToString() == "1")
+                        {
+                            <li class="nav-item @IsActive("Admin", "Uyeler")">
+                                <a class="nav-link" href="~/Admin">Admin Paneli</a>
+                            </li>
+                        }
+
+                        <li class="nav-item @IsActive("YaziEkle", "Uyeler")">
+                            @Html.ActionLink("Yazı Ekle", "YaziEkle", "Uyeler",
+                                    null, new { @class = "nav-link" })
+                        </li>
+
+                        <li class="nav-item @IsActive("OturumKapat", "Uyeler")">
+                            @Html.ActionLink("Oturumu Kapat", "OturumKapat", "Uyeler",
+                                    null, new { @class = "nav-link", returnUrl = Request.RawUrl })
+                        </li>
+
+                        <li class="nav-item @IsActive("UyeDetay", "Uyeler")">
+                            <a class="nav-link" href="~/Uyeler/UyeDetay/@Session["uyeId"].ToString()"><i class="fas fa-user-circle fa-fw"></i> @Session["uyeKadi"].ToString()</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+
+    <div class="container">
+
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+
+                @RenderBody()
+
+            </div>
+
+            <!-- Sidebar Widgets Column -->
+            <div class="col-md-4">
+                <!-- Search Widget -->
+                <div class="card my-4">
+
+                    @using (Html.BeginForm("BlogAra", "Home", FormMethod.Post))
+                    {
+                        <h5 class="card-header">Neler Demişler Neler</h5>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <input type="text" name="deger" required class="form-control" placeholder="Dilinin Ucundakini">
+                                <span class="input-group-btn">
+                                    <input class="btn btn-primary" type="submit" value="Ara">
+                                </span>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <!-- Categories Widget -->
+                <div class="card my-4">
+                    @{ Html.RenderAction("Kategoriler", "Home"); }
+                </div>
+                <!-- Side Widget -->
+                <div class="card my-4">
+                    @{ Html.RenderAction("SonEklenenler", "Home"); }
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Göz Kararı Yazalım 2019</p>
+        </div>
+        <!-- /.container -->
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript -->
+
+    <script src="~/Content/blog/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Content/blog/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>   
+    @RenderSection("scripts", false)
+</body>
+</html>
+
+
+@helper IsActive(string action, string controller)
+{
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+
+    if (actionName == action && controllerName == controller)
+    {
+        @("active");
+    }
+}

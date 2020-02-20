@@ -1,0 +1,56 @@
+﻿
+@model IEnumerable<Yazi>
+@{
+    ViewBag.Title = "BlogAra";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<h1 class="my-4"></h1>
+
+<h4><b>Aranan Değer: </b>@ViewBag.deger</h4>
+
+<h5>@ViewBag.kayityok</h5>
+
+@foreach (var yazi in Model)
+{
+    <!-- Blog Post -->
+    <div class="card mb-4">
+        <img class="card-img-top" src="~/img/@(string.IsNullOrEmpty(yazi.ResimAd) ? "home-bg.jpg" : yazi.ResimAd)" alt="@yazi.Baslik">
+        <div class="card-body text-justify">
+
+            <h2 class="card-title">@yazi.Baslik</h2>
+
+            @if (yazi.Icerik.Length > 200)
+            {
+                <p>
+                    @Html.Raw(yazi.Icerik.Substring(0, 200)) ...
+                </p>
+            }
+            else
+            {
+                <p>
+                    @Html.Raw(yazi.Icerik)
+                </p>
+            }
+
+            <a href="~/Home/YaziDetay/@yazi.Id" class="btn btn-primary">Devamını Oku</a>
+
+        </div>
+        <div class="card-footer text-muted">
+            <b>Kategori : </b> @yazi.Kategori.KategoriAdi |
+            <b>Yazar : </b> <a href="~/Uyeler/UyeDetay/@yazi.UyeId"> @yazi.Uye.KullaniciAdi</a> |
+            <b>Tarih : </b> @yazi.Tarih
+        </div>
+
+    </div>
+
+    <!-- Blog Post -->
+}
+
+
+
+
+
+
+

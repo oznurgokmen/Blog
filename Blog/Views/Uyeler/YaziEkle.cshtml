@@ -1,0 +1,80 @@
+﻿
+@model Yazi
+@{
+    ViewBag.Title = "YaziEkle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<hr />
+<h2>Yazı Ekle</h2><hr />
+
+@if (ViewBag.hata != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.hata
+    </div>
+}
+
+@if (ViewBag.sonuc != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.sonuc
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("YaziEkle", "Uyeler", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.LabelFor(m => m.Baslik)
+
+            @Html.TextBoxFor(m => m.Baslik, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Baslik, null, new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.Icerik)
+
+            @Html.TextAreaFor(m => m.Icerik, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Icerik, null, new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.KategoriId)
+
+            @Html.DropDownListFor(m => m.KategoriId, null, "Seçiniz",
+                new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.KategoriId, null,
+                new { @class = "text-danger" })
+            <br />
+
+            <label for="dosya">Yazı Resmi</label>
+            <input type="file" class="form-control-file" name="dosya" id="dosya" />
+            <br />
+
+            <input type="submit" value="Kaydet" class="btn btn-success" />
+            <br />
+            <br />
+        }
+
+
+
+    </div>
+</div>
+
+@section scripts {
+
+    <script>
+
+        CKEDITOR.replace("Icerik");
+
+    </script>
+
+}
+
+
+
+
+

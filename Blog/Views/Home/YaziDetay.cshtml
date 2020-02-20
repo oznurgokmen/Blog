@@ -1,0 +1,162 @@
+﻿@model Yazi
+
+@{
+    ViewBag.Title = "YaziDetay";
+}
+
+<h1 class="my-4"></h1>
+
+<!-- Blog Post -->
+<div class="card mb-4">
+    <img class="card-img-top" src="~/img/@(string.IsNullOrEmpty(Model.ResimAd) ? "home-bg.jpg" : Model.ResimAd)" alt="@Model.Baslik">
+    <div class="card-body text-justify">
+
+        <h4 class="card-title">@Model.Baslik</h4>
+
+        <p>
+            @Html.Raw(Model.Icerik)
+        </p>
+        <hr />
+
+        <small>Bu Yazı @Model.Okunma Kez Okundu.</small>
+        <br />
+
+        @if (Session["uyeOturum"] != null)
+        {
+            if (Session["uyeId"].ToString() == Model.UyeId.ToString())
+            {
+                <br />
+
+                <a href="~/Uyeler/YaziDuzenle/@Model.Id" class="btn btn-warning">Düzenle</a>
+
+                <a href="~/Uyeler/YaziSil/@Model.Id" class="btn btn-danger" id="yaziSil">Sil</a>
+
+            }
+        }
+
+    </div>
+    <div class="card-footer text-muted">
+        <b>Kategori : </b> @Model.Kategori.KategoriAdi |
+        <b>Yazar : </b> <a href="~/Uyeler/UyeDetay/@Model.UyeId"> @Model.Uye.KullaniciAdi</a> |
+        <b>Tarih : </b> @Model.Tarih | @Model.Yorumlar.Count Yorum
+    </div>
+
+</div>
+
+<!-- Blog Post -->
+<!-- Comment Post -->
+
+@if (Session["uyeOturum"] == null)
+{
+
+<div class="alert alert-info">@Html.ActionLink("Yorumlarınız İçin Üye Girişi Yapınız", "OturumAc", "Uyeler",
+null, new { @class = "nav-link", returnUrl = Request.RawUrl })</div>
+
+}
+
+else
+{
+    <div class="card my-4">
+        <h5 class="card-header">Yorum Yazınız</h5>
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <textarea class="form-control" id="txtYorum" rows="3"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="btnKaydet">Kaydet</button>
+            </form>
+            <br />
+
+            <div id="yorumSonuc"></div>
+
+        </div>
+    </div>
+}
+
+<div id="yorumlar">
+    @Html.Action("Yorumlar", "Home", new { id = Model.Id })
+</div>
+
+<!-- Comment Post -->
+
+@section scripts {
+    <script>
+        $("#yaziSil").click(function () {
+            return confirm("Yazıyı Silmek İstediğinize Emin Misiniz ?");
+        });
+
+        $("#btnKaydet").click(function () {
+
+            var yorum = $("#txtYorum").val();
+
+            if (yorum == "") {
+                $("#yorumSonuc").html("Yorum Giriniz !");
+                $("#yorumSonuc").removeClass();
+                $("#yorumSonuc").addClass("alert alert-danger");
+
+            } else {
+
+                $.ajax({
+
+                    url: "/Uyeler/YorumYap",
+                    type: "POST",
+                    data: { yorum: yorum, Id: @Model.Id },
+                    dataType: "json",
+                    success: function (data) {
+                        $("#yorumSonuc").html("Yorum Eklendi.");
+                        $("#yorumSonuc").removeClass();
+                        $("#yorumSonuc").addClass("alert alert-success");
+                        $.yorumGetir();
+                    }
+
+                });
+            }
+        });
+
+        $(document).on("click", ".btnYorumSil", function () {
+
+            var id = $(this).attr("data-id");
+            $.yorumSil(id);
+        });
+
+        $.yorumSil = function (yId) {
+            
+                $.ajax({
+
+                    url: "/Uyeler/YorumSil",
+                    type: "POST",
+                    data: { id: yId },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data) {
+                            $("#yorumSonuc").html("Yorum Silindi.");
+                            $("#yorumSonuc").removeClass();
+                            $("#yorumSonuc").addClass("alert alert-success");
+                            $.yorumGetir();
+                        } else {
+                            $("#yorumSonuc").html("Hata Oluştu !");
+                            $("#yorumSonuc").removeClass();
+                            $("#yorumSonuc").addClass("alert alert-danger");
+                        }
+                        
+                    }
+
+                });
+        }
+
+        $.yorumGetir = function () {
+            $.ajax({
+
+                    url: "/Home/Yorumlar",
+                    type: "POST",
+                    data: { Id: @Model.Id },
+                    dataType: "html",
+                    success: function (data) {
+                        $("#yorumlar").html(data);                         
+                    }
+
+                });
+        }
+
+    </script>
+}

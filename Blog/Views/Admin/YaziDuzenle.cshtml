@@ -1,0 +1,62 @@
+﻿
+@model Yazi
+@{
+    ViewBag.Title = "YaziDuzenle";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Yazı Düzenle</h2><hr />
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("YaziDuzenle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(m => m.Id)
+
+            @Html.LabelFor(m => m.Baslik)
+
+            @Html.TextBoxFor(m => m.Baslik, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Baslik, null, new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.Icerik)
+
+            @Html.TextAreaFor(m => m.Icerik, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Icerik, null, new { @class = "text-danger" })
+            <br />
+
+            @Html.LabelFor(m => m.KategoriId)
+
+            @Html.DropDownListFor(m => m.KategoriId, null, "Seçiniz",
+                new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.KategoriId, null,
+                new { @class = "text-danger" })
+            <br />
+
+            <label for="dosya">Yazı Resmi</label>
+            <input type="file" class="form-control-file" name="dosya" id="dosya" />
+            <br />
+
+            <input type="submit" value="Kaydet" class="btn btn-success" />
+            <br />
+            <br />
+        }
+
+    </div>
+</div>
+
+@section scripts {
+
+    <script>
+        CKEDITOR.replace("Icerik");
+    </script>
+
+}
+
+
+

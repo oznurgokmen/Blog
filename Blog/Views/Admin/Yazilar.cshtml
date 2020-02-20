@@ -1,0 +1,86 @@
+﻿
+@model IEnumerable<Yazi>
+@{
+    ViewBag.Title = "Yazilar";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Yazılar</h2><hr />
+
+        @if (TempData["hata"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                @TempData["hata"]
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        }
+
+        @if (TempData["sonuc"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+
+                @TempData["sonuc"]
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        }
+        <br />
+
+        @Html.ActionLink("Yeni Yazı Ekle", "YaziEkle", "Admin",
+                               null, new { @class = "btn btn-info" })
+        <br /><br />
+
+        <table class="table table-striped">
+            <tr>
+                <td><b>Id</b></td>
+                <td><b>Fotoğraf</b></td>
+                <td><b>Başlık</b></td>
+                <td><b>Kategori</b></td>
+                <td><b>Yazar</b></td>
+                <td><b>Düzenle</b></td>
+                <td><b>Sil</b></td>
+            </tr>
+
+            @foreach (var yazi in Model)
+            {
+                <tr>
+                    <td>@yazi.Id</td>
+                    <td><img class="img-thumbnail" src="~/img/@(string.IsNullOrEmpty(yazi.ResimAd) ? "home-bg.jpg" : yazi.ResimAd)" style="width:100px;"></td>
+                    <td>@yazi.Baslik</td>
+                    <td>@yazi.Kategori.KategoriAdi</td>
+                    <td>@yazi.Uye.KullaniciAdi</td>
+                    <td>
+                        @Html.ActionLink("DÜZENLE", "YaziDuzenle", "Admin", new { id = yazi.Id }, new { @class = "btn btn-warning" })
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("YaziSil", "Admin", FormMethod.Post, new { style = "display: inline", @class = "SilForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", yazi.Id)
+                            <button class="btn btn-danger">SİL</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $("form.SilForm").submit(function () {
+            return confirm("Yazıyı Silmek İstediğinize Emin Misiniz ?");
+        });
+    </script>
+}
+

@@ -1,0 +1,90 @@
+﻿
+@model IEnumerable<Uye>
+@{
+    ViewBag.Title = "Uyeler";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Üyeler</h2><hr />
+
+        @if (TempData["hata"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                @TempData["hata"]
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        }
+
+        @if (TempData["sonuc"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+
+                @TempData["sonuc"]
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        }
+        <br />
+
+        @Html.ActionLink("Yeni Üye Ekle", "UyeEkle", "Admin",
+                               null, new { @class = "btn btn-info" })
+        <br /><br />
+
+        <table class="table table-striped">
+            <tr>
+                <td><b>Id</b></td>
+                <td><b>Kullanıcı Adı</b></td>
+                <td><b>Adı Soyadı</b></td>
+                <td><b>Email</b></td>
+                <td><b>Düzenle</b></td>
+                <td><b>Sil</b></td>
+            </tr>
+
+            @foreach (var uye in Model)
+            {
+            <tr>
+                <td>@uye.Id</td>
+                <td>@uye.KullaniciAdi</td>
+                <td>@uye.AdSoyad</td>
+                <td>@uye.Email</td>
+                <td>
+                    @Html.ActionLink("DÜZENLE", "UyeDuzenle", "Admin", new { id = uye.Id }, new { @class = "btn btn-warning" })
+                </td>
+                <td>
+                    @using (Html.BeginForm("UyeSil", "Admin", FormMethod.Post, new { style = "display: inline", @class = "SilForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("id", uye.Id)
+                        <button class="btn btn-danger">SİL</button>
+                    }
+                </td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $("form.SilForm").submit(function () {
+            return confirm("Üyeyi Silmek İstediğinize Emin Misiniz ?");
+        });
+    </script>
+}
+
+
+
+
+
+
+

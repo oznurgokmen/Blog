@@ -1,0 +1,92 @@
+﻿
+@model Uye
+@{
+    ViewBag.Title = "UyeDetay";
+}
+
+<h1 class="my-4">Üye Detay</h1>
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+        @TempData["hata"]
+
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+}
+
+@if (TempData["sonuc"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+
+        @TempData["sonuc"]
+
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+}
+<br />
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <h3>Üye Bilgileri</h3>
+            <b>Kullanıcı Adı</b> @Model.KullaniciAdi <br />
+            <b>Yazı Sayısı</b> @Model.Yazilar.Count <br />
+            <b>Yorum Sayısı</b> @Model.Yorumlar.Count <br />
+            <br />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h3>Üye Yazıları</h3>
+            @foreach (var yazi in Model.Yazilar)
+            {
+                <a href="~/Home/YaziDetay/@yazi.Id">
+                    @yazi.Baslik (@yazi.Kategori.KategoriAdi)
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h3>Üye Yorumları</h3>
+
+            <ul>
+                @foreach (var yorum in Model.Yorumlar)
+                {
+                    <li>@yorum.YorumIcerik ( <b>Başlık :</b> @yorum.Yazi.Baslik | <b>Yazı Kategorisi :</b> @yorum.Yazi.Kategori.KategoriAdi)</li>
+                    
+                }
+            </ul>
+           
+        </div>
+    </div>
+</div>
+
+@if (Session["uyeOturum"] != null)
+{
+    if (Session["uyeId"].ToString() == Model.Id.ToString())
+    {
+        <br />
+
+        <a href="~/Uyeler/ProfilDuzenle/@Model.Id" class="btn btn-success">Profil Düzenle</a>      
+
+        <br />
+    }
+   
+}
+
+

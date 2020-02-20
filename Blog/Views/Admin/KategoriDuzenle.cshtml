@@ -1,0 +1,33 @@
+﻿
+@model Kategori
+@{
+    ViewBag.Title = "KategoriDuzenle";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Kategori Düzenle</h2>
+
+<div class="row">
+    <div class="col-md-6">
+
+        @using (Html.BeginForm("KategoriDuzenle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(m => m.Id)
+
+            @Html.LabelFor(m => m.KategoriAdi)
+
+            @Html.TextBoxFor(m => m.KategoriAdi, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.KategoriAdi, null, new { @class = "text-danger" })
+            <br />
+
+            <input type="submit" value="Kaydet" class="btn btn-success" />
+            <br />
+            <br />
+        }    
+
+    </div>
+</div>
+

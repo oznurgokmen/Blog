@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Yazi>
+@{
+    ViewBag.Title = "Anasayfa";
+}
+
+<h1 class="my-4"></h1>
+
+@foreach (var yazi in Model)
+{
+    <!-- Blog Post -->
+    <div class="card mb-4">
+        <img class="card-img-top" src="~/img/@(string.IsNullOrEmpty(yazi.ResimAd) ? "home-bg.jpg" : yazi.ResimAd)" alt="@yazi.Baslik">
+        <div class="card-body text-justify">
+
+            <h4 class="card-title">@yazi.Baslik</h4>
+
+            @if (yazi.Icerik.Length > 200)
+            {
+                <p>
+                    @Html.Raw(yazi.Icerik.Substring(0, 200)) ...
+                </p>
+            }
+            else
+            {
+                <p>
+                    @Html.Raw(yazi.Icerik)
+                </p>
+            }
+
+            <a href="~/Home/YaziDetay/@yazi.Id" class="btn btn-primary">Devamını Oku</a>
+        </div>
+        <div class="card-footer text-muted">
+            <b>Kategori : </b> @yazi.Kategori.KategoriAdi |
+            <b>Yazar : </b> <a href="~/Uyeler/UyeDetay/@yazi.UyeId"> @yazi.Uye.KullaniciAdi</a> |
+            <b>Tarih : </b> @yazi.Tarih | @yazi.Yorumlar.Count Yorum
+        </div>
+
+    </div>
+
+    <!-- Blog Post -->
+}
+
+<!-- Pagination -->
+@*<ul class="pagination justify-content-center mb-4">
+        <li class="page-item">
+            <a class="page-link" href="#">&larr; Older</a>
+        </li>
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Newer &rarr;</a>
+        </li>
+    </ul>*@
+
+@section scripts{
+ 
+    <script>
+
+        window.cookieconsent_options = { "message": "Sitemizden en iyi şekilde faydalanabilmeniz için çerezler kullanılmaktadır. Bu siteye giriş yaparak çerez kullanımını kabul etmiş sayılıyorsunuz.", "dismiss": "Anladım", "learnMore": "Daha Fazla Bilgi Al", "link": "#", "theme": "light-bottom" };
+
+    </script>
+
+
+}
+
+
+
